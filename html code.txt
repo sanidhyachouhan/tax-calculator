@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Calculator</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Tax Calculator</h2>
+        <form id="taxForm">
+            <div class="form-group">
+                <label for="income">Gross Annual Income (in Lakhs):</label>
+                <input type="number" id="income" class="form-control" required min="0">
+                <div class="tooltip"></div>
+            </div>
+            <div class="form-group">
+                <label for="extraIncome">Extra Income (in Lakhs):</label>
+                <input type="number" id="extraIncome" class="form-control" min="0">
+                <div class="tooltip"></div>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <select id="age" class="form-control">
+                    <option value="">Select Age Range</option>
+                    <option value="<40">&lt;40</option>
+                    <option value=">=40&<60">&ge;40 &amp; &lt;60</option>
+                    <option value=">=60">&ge;60</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="deduction">Enter Total Applicable Deduction:</label>
+                <input type="number" id="deduction" class="form-control" min="0">
+                <div class="tooltip"></div>
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+        <div class="tooltip-icon">?</div>
+        <div class="tooltip">
+            The tax calculation works based on this formula:
+            <ul>
+                <li>Overall income (after deductions) under 8 (&le;) Lakhs is not taxed.</li>
+                <li>Income over 8 (&gt;) Lakhs, the amount over 8 Lakhs is taxed at:
+                    <ul>
+                        <li>30% for people with age &lt; 40</li>
+                        <li>40% for people with age &ge; 40 but &lt; 60</li>
+                        <li>10% for people with age &ge; 60</li>
+                    </ul>
+                </li>
+                <li>Example: Age = 34, Income = 40 Lakhs, no deductions, tax = .3 * (40 - 8) = .3 * 32 = 9.6 Lakhs</li>
+            </ul>
+        </div>
+        <div id="output" class="output-box"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

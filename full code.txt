@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Calculator</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .form-group label {
+            width: 250px;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="number"],
+        .form-group select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .output-box {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        /* Tooltip container */
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: calc(100% + 10px);
+            transform: translateY(-50%);
+            width: 300px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            white-space: normal;
+            word-wrap: break-word;
+            z-index: 1;
+        }
+
+        .tooltip-icon:hover + .tooltip, .tooltip:hover {
+            display: block;
+        }
+
+        .tooltip-icon {
+            position: absolute;
+            top: 10%;
+            right: -25px;
+            width: 20px;
+            height: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tax Calculator</h2>
+        <form id="taxForm">
+            <div class="form-group">
+                <label for="income">Gross Annual Income (in Lakhs):</label>
+                <input type="number" id="income" class="form-control" required min="0">
+                <div class="tooltip"></div>
+            </div>
+            <div class="form-group">
+                <label for="extraIncome">Extra Income (in Lakhs):</label>
+                <input type="number" id="extraIncome" class="form-control" min="0">
+                <div class="tooltip"></div>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <select id="age" class="form-control">
+                    <option value="">Select Age Range</option>
+                    <option value="<40">&lt;40</option>
+                    <option value=">=40&<60">&ge;40 &amp; &lt;60</option>
+                    <option value=">=60">&ge;60</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="deduction">Enter Total Applicable Deduction:</label>
+                <input type="number" id="deduction" class="form-control" min="0">
+                <div class="tooltip"></div>
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+        <div class="tooltip-icon">?</div>
+        <div class="tooltip">
+            The tax calculation works based on this formula:
+            <ul>
+                <li>Overall income (after deductions) under 8 (&le;) Lakhs is not taxed.</li>
+                <li>Income over 8 (&gt;) Lakhs, the amount over 8 Lakhs is taxed at:
+                    <ul>
+                        <li>30% for people with age &lt; 40</li>
+                        <li>40% for people with age &ge; 40 but &lt; 60</li>
+                        <li>10% for people with age &ge; 60</li>
+                    </ul>
+                </li>
+                <li>Example: Age = 34, Income = 40 Lakhs, no deductions, tax = .3 * (40 - 8) = .3 * 32 = 9.6 Lakhs</li>
+            </ul>
+        </div>
+        <div id="output" class="output-box"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltipIcon = document.querySelector('.tooltip-icon');
+            const tooltipBox = document.querySelector('.tooltip');
+
+            tooltipIcon.addEventListener('mouseover', function() {
+                tooltipBox.style.display = 'block';
+            });
+
+            tooltipBox.addEventListener('mouseleave', function() {
+                tooltipBox.style.display = 'none';
+            });
+
+            const form = document.getElementById('taxForm');
+            const outputBox = document.getElementById('output');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const income = parseFloat(document.getElementById('income').value);
+                const extraIncome = parseFloat(document.getElementById('extraIncome').value) || 0;
+                const age = document.getElementById('age').value;
+                const deduction = parseFloat(document.getElementById('deduction').value) || 0;
+
+                let tax = 0;
+                let overallIncome = 0;
+
+                if (income + extraIncome - deduction <= 8) {
+                    overallIncome = (income + extraIncome - deduction).toFixed(2);
+                } else {
+                    if (age === "<40") {
+                        tax = 0.3 * (income + extraIncome - deduction - 8);
+                    } else if (age === ">=40&<60") {
+                        tax = 0.4 * (income + extraIncome - deduction - 8);
+                    } else if (age === ">=60") {
+                        tax = 0.1 * (income + extraIncome - deduction - 8);
+                    }
+                    overallIncome = (income + extraIncome - deduction - tax).toFixed(2);
+                }
+
+                outputBox.textContent = `Your overall income after tax deduction: ${overallIncome} Lakhs`;
+            });
+        });
+    </script>
+</body>
+</html>

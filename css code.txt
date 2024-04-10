@@ -1,0 +1,89 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.form-group {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.form-group label {
+    width: 250px;
+    margin-right: 20px;
+    font-weight: bold;
+}
+
+.form-group input[type="number"],
+.form-group select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.output-box {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 10px);
+    transform: translateY(-50%);
+    width: 300px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    white-space: normal;
+    word-wrap: break-word;
+    z-index: 1;
+}
+
+.tooltip-icon:hover + .tooltip, .tooltip:hover {
+    display: block;
+}
+
+.tooltip-icon {
+    position: absolute;
+    top: 10%;
+    right: -25px;
+    width: 20px;
+    height: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    cursor: help;
+}

@@ -1,0 +1,42 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipIcon = document.querySelector('.tooltip-icon');
+    const tooltipBox = document.querySelector('.tooltip');
+
+    tooltipIcon.addEventListener('mouseover', function() {
+        tooltipBox.style.display = 'block';
+    });
+
+    tooltipBox.addEventListener('mouseleave', function() {
+        tooltipBox.style.display = 'none';
+    });
+
+    const form = document.getElementById('taxForm');
+    const outputBox = document.getElementById('output');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const income = parseFloat(document.getElementById('income').value);
+        const extraIncome = parseFloat(document.getElementById('extraIncome').value) || 0;
+        const age = document.getElementById('age').value;
+        const deduction = parseFloat(document.getElementById('deduction').value) || 0;
+
+        let tax = 0;
+        let overallIncome = 0;
+
+        if (income + extraIncome - deduction <= 8) {
+            overallIncome = (income + extraIncome - deduction).toFixed(2);
+        } else {
+            if (age === "<40") {
+                tax = 0.3 * (income + extraIncome - deduction - 8);
+            } else if (age === ">=40&<60") {
+                tax = 0.4 * (income + extraIncome - deduction - 8);
+            } else if (age === ">=60") {
+                tax = 0.1 * (income + extraIncome - deduction - 8);
+            }
+            overallIncome = (income + extraIncome - deduction - tax).toFixed(2);
+        }
+
+        outputBox.textContent = `Your overall income after tax deduction: ${overallIncome} Lakhs`;
+    });
+});
